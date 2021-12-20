@@ -333,8 +333,9 @@ namespace LogictecaTest.Controllers
               sheet.Cells[2, dtExcel.Columns.IndexOf(column)+1] = column.ColumnName;
             for (int i = 1; i <= dtExcel.Rows.Count; i++)
             {
-                foreach (DataColumn column in dtExcel.Columns)
-                    sheet.Cells[i+2, dtExcel.Columns.IndexOf(column) + 1] = dtExcel.Rows[i-1].ItemArray[dtExcel.Columns.IndexOf(column)]?.ToString();
+                    for (int r = 1; r <= dtExcel.Columns.Count; r++)
+                        sheet.Cells[i + 2, r] = dtExcel.Rows[i - 1].ItemArray[r-1]?.ToString();
+                    
             }
             wb.SaveAs(outExcelPath);
             wb.Close();
