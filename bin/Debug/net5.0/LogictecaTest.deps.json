@@ -43,7 +43,6 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "5.0.2",
           "System.Data.OleDb": "6.0.0",
           "System.Linq.Dynamic.Core": "1.2.15",
-          "TakeIo.Spreadsheet": "1.0.0.16",
           "Z.EntityFramework.Extensions.EFCore": "5.13.4",
           "Microsoft.AspNetCore.Antiforgery": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "5.0.0.0",
@@ -167,6 +166,7 @@
           "Microsoft.Extensions.WebEncoders": "5.0.0.0",
           "Microsoft.JSInterop": "5.0.0.0",
           "Microsoft.Net.Http.Headers": "5.0.0.0",
+          "Microsoft.Office.Interop.Excel": "16.0.0.0",
           "Microsoft.VisualBasic.Core": "10.0.6.0",
           "Microsoft.VisualBasic": "10.0.0.0",
           "Microsoft.Win32.Primitives": "5.0.0.0",
@@ -2274,17 +2274,6 @@
           "ref/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
-      "TakeIo.Spreadsheet/1.0.0.16": {
-        "runtime": {
-          "lib/TakeIo.Spreadsheet.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        },
-        "compile": {
-          "lib/TakeIo.Spreadsheet.dll": {}
-        }
-      },
       "Z.EntityFramework.Extensions.EFCore/5.13.4": {
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
@@ -3033,6 +3022,12 @@
       "Microsoft.Net.Http.Headers/5.0.0.0": {
         "compile": {
           "Microsoft.Net.Http.Headers.dll": {}
+        },
+        "compileOnly": true
+      },
+      "Microsoft.Office.Interop.Excel/16.0.0.0": {
+        "compile": {
+          "Microsoft.Office.Interop.Excel.dll": {}
         },
         "compileOnly": true
       },
@@ -5114,13 +5109,6 @@
       "path": "system.xml.xpath.xmldocument/4.3.0",
       "hashPath": "system.xml.xpath.xmldocument.4.3.0.nupkg.sha512"
     },
-    "TakeIo.Spreadsheet/1.0.0.16": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-IxRo7YUG8rxTW3UIFZ3Y/VHAl3DsmpFZoWMHiRHm+0y9oUrG+iNEtu3odiOwvqqrxmAVHLSsn2FsaiwClD0OJg==",
-      "path": "takeio.spreadsheet/1.0.0.16",
-      "hashPath": "takeio.spreadsheet.1.0.0.16.nupkg.sha512"
-    },
     "Z.EntityFramework.Extensions.EFCore/5.13.4": {
       "type": "package",
       "serviceable": true,
@@ -5734,6 +5722,11 @@
       "sha512": ""
     },
     "Microsoft.Net.Http.Headers/5.0.0.0": {
+      "type": "referenceassembly",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Office.Interop.Excel/16.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

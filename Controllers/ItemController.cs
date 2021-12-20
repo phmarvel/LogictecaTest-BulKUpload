@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Data.OleDb;
 using System.Data;
 using LogictecaTest.Models;
-using NPOI.HSSF.UserModel;
+using LogictecaTest.Utilities;
 
 namespace LogictecaTest.Controllers
 {
@@ -300,19 +300,17 @@ namespace LogictecaTest.Controllers
 
                 }).CopyToDataTable());
 
+                
+               
                 string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "export");
                 Directory.CreateDirectory(uploads);
-                string filename = $"Items-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xls";
+                string filename = $"Items-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
                 string filePath = Path.Combine(uploads, filename);
-                using (MemoryStream stream = CreateExcelSheet(ds))
-                {
-                    using (var fileStream = System.IO.File.Create(filePath))
-                    {
-                        stream.Seek(0, SeekOrigin.Begin);
-                        stream.CopyTo(fileStream);
-                    }
-                }
-                
+
+                CopyDataTableToExcel(ds.Tables[0], filePath, "Cisco PSS Services - Dec 2020");
+
+
+
                 string url = "/export/"+ filename;
                 return Ok(new { url });
 
@@ -322,55 +320,55 @@ namespace LogictecaTest.Controllers
                 throw;
             }
         }
-
-        public static MemoryStream CreateExcelSheet(DataSet dataToProcess)
+        public static void CopyDataTableToExcel(DataTable dtExcel, string outExcelPath,string sheetName)
         {
-            MemoryStream stream = new MemoryStream();
 
-            if (dataToProcess != null)
+            var app = new Microsoft.Office.Interop.Excel.Application();
+            app.Visible = true;
+            var wb = app.Workbooks.Add(Microsoft.Office.Interop.Excel.XlSheetType.xlWorksheet);
+            var sheet = (Microsoft.Office.Interop.Excel.Worksheet)wb.Sheets[1];
+            sheet.Name =sheetName;
+            sheet.Cells[1, 1] = "Date : " + DateTime.Now.ToString("dd/MM/yyyy");
+            foreach (DataColumn column in dtExcel.Columns)
+              sheet.Cells[2, dtExcel.Columns.IndexOf(column)+1] = column.ColumnName;
+            for (int i = 1; i <= dtExcel.Rows.Count; i++)
             {
-                var excelworkbook = new HSSFWorkbook();
-
-                foreach (DataTable table in dataToProcess.Tables)
-                {
-                    var worksheet = excelworkbook.CreateSheet("Cisco PSS Services - Dec 2020");
-                    var dateRow = worksheet.CreateRow(0);
-                    dateRow.CreateCell(0).SetCellValue("Date : "+DateTime.Now.ToString("dd/MM/yyyy"));
-
-                    var headerRow = worksheet.CreateRow(1);
-                 
-                    foreach (DataColumn column in table.Columns)
-                    {
-                        headerRow.CreateCell(table.Columns.IndexOf(column)).SetCellValue(column.ColumnName);
-
-                    }
-
-                    //freeze top panel. 
-                    worksheet.CreateFreezePane(0, 1, 0, 1);
-
-
-                    int rowNumber = 2;
-
-                    foreach (DataRow row in table.Rows)
-                    {
-                        var sheetRow = worksheet.CreateRow(rowNumber++);
-
-                        foreach (DataColumn column in table.Columns)
-                        {
-                            sheetRow.CreateCell(table.Columns.IndexOf(column)).SetCellValue(row[column].ToString());
-                        }
-
-
-                    }
-
-                }
-
-                excelworkbook.Write(stream);
+                foreach (DataColumn column in dtExcel.Columns)
+                    sheet.Cells[i+2, dtExcel.Columns.IndexOf(column) + 1] = dtExcel.Rows[i-1].ItemArray[dtExcel.Columns.IndexOf(column)]?.ToString();
             }
+            wb.SaveAs(outExcelPath);
+            wb.Close();
 
 
+            //string qryFieldName = "";
+            //string qryFieldForCreate = "";
+            //string qryFieldValue = "";
+            //OleDbHelper oleDb = new OleDbHelper(outExcelPath);
+            //for (int i = 0; i < dtExcel.Columns.Count; i++)
+            //{
+            //    qryFieldName = qryFieldName + (qryFieldName.Trim() != "" ? ", " : "") + "[" + dtExcel.Columns[i].ColumnName + "]";
+            //    qryFieldForCreate = qryFieldForCreate + (qryFieldForCreate.Trim() != "" ? ", " : "") +
+            //         "[" + dtExcel.Columns[i].ColumnName + "] varchar(max)";
+            //}
+            //#region Headers
+            //oleDb.ExecuteNonQuery("Create table " + sheetName + " (" + qryFieldForCreate + ")");
+            //qryFieldValue = "Date : " + DateTime.Now.ToString("dd/MM/yyyy");
+            //oleDb.ExecuteNonQuery("Insert into [" + sheetName + "$] Values (" + qryFieldValue + ")");
+            //qryFieldValue = "";
+            //foreach (DataColumn column in dtExcel.Columns)
+            //{
+            //    if (string.IsNullOrWhiteSpace(qryFieldValue))
+            //        qryFieldValue += $"'{column.ColumnName}'";
+            //    else
+            //        qryFieldValue += $",'{column.ColumnName}'";
+            //}
+            //oleDb.ExecuteNonQuery("Insert into [" + sheetName + "$] Values (" + qryFieldValue + ")");
 
-            return stream;
+            //#endregion
+
+            //oleDb.bulkInsert(dtExcel, sheetName);
+
+
         }
 
     }

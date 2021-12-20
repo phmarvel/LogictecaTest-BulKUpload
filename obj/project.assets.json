@@ -2639,15 +2639,6 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
-      "TakeIo.Spreadsheet/1.0.0.16": {
-        "type": "package",
-        "compile": {
-          "lib/TakeIo.Spreadsheet.dll": {}
-        },
-        "runtime": {
-          "lib/TakeIo.Spreadsheet.dll": {}
-        }
-      },
       "Z.EntityFramework.Extensions.EFCore/5.13.4": {
         "type": "package",
         "dependencies": {
@@ -8865,19 +8856,6 @@
         "system.xml.xpath.xmldocument.nuspec"
       ]
     },
-    "TakeIo.Spreadsheet/1.0.0.16": {
-      "sha512": "IxRo7YUG8rxTW3UIFZ3Y/VHAl3DsmpFZoWMHiRHm+0y9oUrG+iNEtu3odiOwvqqrxmAVHLSsn2FsaiwClD0OJg==",
-      "type": "package",
-      "path": "takeio.spreadsheet/1.0.0.16",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/TakeIo.Spreadsheet.dll",
-        "lib/TakeIo.Spreadsheet.xml",
-        "takeio.spreadsheet.1.0.0.16.nupkg.sha512",
-        "takeio.spreadsheet.nuspec"
-      ]
-    },
     "Z.EntityFramework.Extensions.EFCore/5.13.4": {
       "sha512": "ix1GQILQBMJ7X9Eo2AN2uocaoV2dsBKKs5hadxXDRqie8Mo9tCQRaiAeDF/8axNrtDaRXGXaoXHCxelTZ4PrRw==",
       "type": "package",
@@ -8904,7 +8882,6 @@
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
       "System.Data.OleDb >= 6.0.0",
       "System.Linq.Dynamic.Core >= 1.2.15",
-      "TakeIo.Spreadsheet >= 1.0.0.16",
       "Z.EntityFramework.Extensions.EFCore >= 5.13.4"
     ]
   },
@@ -8991,10 +8968,6 @@
             "target": "Package",
             "version": "[1.2.15, )"
           },
-          "TakeIo.Spreadsheet": {
-            "target": "Package",
-            "version": "[1.0.0.16, )"
-          },
           "Z.EntityFramework.Extensions.EFCore": {
             "target": "Package",
             "version": "[5.13.4, )"
@@ -9027,17 +9000,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-preview.4.21255.9\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'TakeIo.Spreadsheet 1.0.0.16' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
-      "libraryId": "TakeIo.Spreadsheet",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    }
-  ]
+  }
 }

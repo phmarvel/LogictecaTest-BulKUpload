@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5XvUOgnhxtFOuC5nuh2eacEC020sp0BLrEfXKu93+NwnrI+yrvBRY2cuQPHD4YJbQnHNatB8FzNqyv8s/1KeMw==",
+  "dgSpecHash": "Ve3j4d9gdm+BX7BZmz+ytsuK9TNSq6J17xaDMi3iDCKcMdIvm7S2WZQlABnCjIoXx79UMFNDmdzIPQLFXFqRIQ==",
   "success": true,
   "projectFilePath": "E:\\Higazy\\upwork\\test project\\LogictecaTest\\LogictecaTest\\LogictecaTest.csproj",
   "expectedPackageFiles": [
@@ -166,20 +166,8 @@
     "C:\\Users\\dell\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\system.xml.xpath\\4.3.0\\system.xml.xpath.4.3.0.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.3.0\\system.xml.xpath.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\dell\\.nuget\\packages\\takeio.spreadsheet\\1.0.0.16\\takeio.spreadsheet.1.0.0.16.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\z.entityframework.extensions.efcore\\5.13.4\\z.entityframework.extensions.efcore.5.13.4.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.5\\microsoft.netcore.app.host.win-x64.5.0.5.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'TakeIo.Spreadsheet 1.0.0.16' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
-      "libraryId": "TakeIo.Spreadsheet",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    }
-  ]
+  "logs": []
 }
