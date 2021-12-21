@@ -306,8 +306,7 @@ namespace LogictecaTest.Controllers
                 Directory.CreateDirectory(uploads);
                 string filename = $"Items-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
                 string filePath = Path.Combine(uploads, filename);
-
-                CopyDataTableToExcel(ds.Tables[0], filePath, "Cisco PSS Services - Dec 2020");
+                ds.Tables[0].ExportToExcel(filePath, "Cisco PSS Services - Dec 2020");
 
 
 
@@ -320,56 +319,95 @@ namespace LogictecaTest.Controllers
                 throw;
             }
         }
-        public static void CopyDataTableToExcel(DataTable dtExcel, string outExcelPath,string sheetName)
+    }
+    public static class My_DataTable_Extensions
+    {
+
+        // Export DataTable into an excel file with field names in the header line
+        // - Save excel file without ever making it visible if filepath is given
+        // - Don't save excel file, just make it visible if no filepath is given
+        public static void ExportToExcel(this DataTable tbl, string excelFilePath,string sheetName)
         {
-
-            var app = new Microsoft.Office.Interop.Excel.Application();
-            app.Visible = true;
-            var wb = app.Workbooks.Add(Microsoft.Office.Interop.Excel.XlSheetType.xlWorksheet);
-            var sheet = (Microsoft.Office.Interop.Excel.Worksheet)wb.Sheets[1];
-            sheet.Name =sheetName;
-            sheet.Cells[1, 1] = "Date : " + DateTime.Now.ToString("dd/MM/yyyy");
-            foreach (DataColumn column in dtExcel.Columns)
-              sheet.Cells[2, dtExcel.Columns.IndexOf(column)+1] = column.ColumnName;
-            for (int i = 1; i <= dtExcel.Rows.Count; i++)
+            try
             {
-                    for (int r = 1; r <= dtExcel.Columns.Count; r++)
-                        sheet.Cells[i + 2, r] = dtExcel.Rows[i - 1].ItemArray[r-1]?.ToString();
-                    
+                if (tbl == null || tbl.Columns.Count == 0)
+                    throw new Exception("ExportToExcel: Null or empty input table!\n");
+
+                // load excel, and create a new workbook
+                var excelApp = new Microsoft.Office.Interop.Excel.Application();
+                excelApp.Workbooks.Add();
+
+                // single worksheet
+                Microsoft.Office.Interop.Excel._Worksheet workSheet = excelApp.ActiveSheet;
+                workSheet.Name = sheetName;
+                // column headings
+                workSheet.Cells[1, 1] = "Date : " + DateTime.Now.ToString("dd/MM/yyyy");
+                for (var i = 0; i < tbl.Columns.Count; i++)
+                {
+                    workSheet.Cells[2, i + 1] = tbl.Columns[i].ColumnName;
+                }
+
+
+                // Get dimensions of the 2-d array
+                int rowCount = tbl.Rows.Count;
+                int columnCount = tbl.Columns.Count;
+                Microsoft.Office.Interop.Excel.Range range = (Microsoft.Office.Interop.Excel.Range)workSheet.Cells[3, 1];
+                range = range.get_Resize(rowCount, columnCount);
+                var matrix =tbl.Rows.OfType<DataRow>().Select(s => new string[] { 
+                    s.ItemArray[0].ToString(),
+                    s.ItemArray[1].ToString(),
+                    s.ItemArray[2].ToString(),
+                    s.ItemArray[3].ToString(),
+                    s.ItemArray[4].ToString(),
+                    s.ItemArray[5].ToString(),
+                    s.ItemArray[6].ToString(),
+                    s.ItemArray[7].ToString(),
+                });
+                range.Value2 = CreateRectangularArray<string>(matrix.ToArray());
+
+                // check file path
+                if (!string.IsNullOrEmpty(excelFilePath))
+                {
+                    try
+                    {
+                        workSheet.SaveAs(excelFilePath);
+                        excelApp.Quit();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+                                            + ex.Message);
+                    }
+                }
+                else
+                { // no file path is given
+                    excelApp.Visible = true;
+                }
             }
-            wb.SaveAs(outExcelPath);
-            wb.Close();
-
-
-            //string qryFieldName = "";
-            //string qryFieldForCreate = "";
-            //string qryFieldValue = "";
-            //OleDbHelper oleDb = new OleDbHelper(outExcelPath);
-            //for (int i = 0; i < dtExcel.Columns.Count; i++)
-            //{
-            //    qryFieldName = qryFieldName + (qryFieldName.Trim() != "" ? ", " : "") + "[" + dtExcel.Columns[i].ColumnName + "]";
-            //    qryFieldForCreate = qryFieldForCreate + (qryFieldForCreate.Trim() != "" ? ", " : "") +
-            //         "[" + dtExcel.Columns[i].ColumnName + "] varchar(max)";
-            //}
-            //#region Headers
-            //oleDb.ExecuteNonQuery("Create table " + sheetName + " (" + qryFieldForCreate + ")");
-            //qryFieldValue = "Date : " + DateTime.Now.ToString("dd/MM/yyyy");
-            //oleDb.ExecuteNonQuery("Insert into [" + sheetName + "$] Values (" + qryFieldValue + ")");
-            //qryFieldValue = "";
-            //foreach (DataColumn column in dtExcel.Columns)
-            //{
-            //    if (string.IsNullOrWhiteSpace(qryFieldValue))
-            //        qryFieldValue += $"'{column.ColumnName}'";
-            //    else
-            //        qryFieldValue += $",'{column.ColumnName}'";
-            //}
-            //oleDb.ExecuteNonQuery("Insert into [" + sheetName + "$] Values (" + qryFieldValue + ")");
-
-            //#endregion
-
-            //oleDb.bulkInsert(dtExcel, sheetName);
-
-
+            catch (Exception ex)
+            {
+                throw new Exception("ExportToExcel: \n" + ex.Message);
+            }
+        }
+        static T[,] CreateRectangularArray<T>(T[][] arrays)
+        {
+            // TODO: Validation and special-casing for arrays.Count == 0
+            int minorLength = arrays[0].Length;
+            T[,] ret = new T[arrays.Length, minorLength];
+            for (int i = 0; i < arrays.Length; i++)
+            {
+                var array = arrays[i];
+                if (array.Length != minorLength)
+                {
+                    throw new ArgumentException
+                        ("All arrays must be the same length");
+                }
+                for (int j = 0; j < minorLength; j++)
+                {
+                    ret[i, j] = array[j];
+                }
+            }
+            return ret;
         }
 
     }
